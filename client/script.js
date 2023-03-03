@@ -69,8 +69,8 @@ function chatStripe(isAi, value, uniqueId) {
   `;
 }
 
-const secretKey = process.env.VITE_SECRET_KEY;
-const authKey = process.env.VITE_AUTH_KEY;
+const secretKey = import.meta.env.VITE_SECRET_KEY;
+const authKey = import.meta.env.VITE_AUTH_KEY;
 // const encryptedChatKey = CryptoJS.AES.encrypt(authKey, secretKey).toString();
 
 const sessionChatKey = JSON.parse(sessionStorage.getItem("chatKey"));
@@ -83,8 +83,6 @@ const decryptedChatValue = sessionChatKey
 const authorizedBrowser = authKey === decryptedChatValue;
 
 console.log(authorizedBrowser);
-console.log('process: ',process.env.VITE_AUTH_KEY);
-console.log('vite: ',import.meta.env.VITE_AUTH_KEY);
 
 
 const handleSubmit = async (e) => {
@@ -151,7 +149,7 @@ const handleSubmit = async (e) => {
 
   //fetch data from node server
 
-  const response = await fetch(process.env.VITE_FETCH_URL, {
+  const response = await fetch(import.meta.env.VITE_FETCH_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
