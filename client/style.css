@@ -21,6 +21,12 @@ body {
   align-items: center;
   justify-content: space-between;
 }
+@media screen and (max-width: 650px) {
+  #app {
+    height: 85vh !important;
+
+  }
+}
 
 #chat_container {
   position: relative;
