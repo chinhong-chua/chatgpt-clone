@@ -83,6 +83,9 @@ const decryptedChatValue = sessionChatKey
 const authorizedBrowser = authKey === decryptedChatValue;
 
 console.log(authorizedBrowser);
+console.log('process: ',process.env.VITE_AUTH_KEY);
+console.log('vite: ',import.meta.env.VITE_AUTH_KEY);
+
 
 const handleSubmit = async (e) => {
   e.preventDefault();
