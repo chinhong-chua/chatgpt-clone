@@ -168,14 +168,14 @@ form img {
   flex-wrap: wrap;
 
 }
-/* .authorizeText{
+.authorizeText{
   width: 100%;
-  text-align: left;
+  text-align: center;
   margin: 0;
   padding: 0;
-} */
+}
 #authorizeMessage{
-  width: 50%;
+  width: 40%;
   min-width: 200px;
   font-size: 18px;
   margin: 10px;
@@ -184,4 +184,19 @@ form img {
   border-radius: 5px;
   border: none;
   outline: none;
+}
+#authorizeBtn{
+  display: block;
+  position: relative;
+  min-width: 200px;
+  height: 50px;
+  background-color: #10a37f;
+  border-radius: 10px;
+  border: none;
+  margin: 6px;
+  color: #fff;
+  font-size: large;
+  font-weight: 500;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  letter-spacing: 0.2dvh
 }

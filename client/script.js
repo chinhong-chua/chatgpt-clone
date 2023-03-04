@@ -48,6 +48,7 @@ function validateUser(value) {
           <div class="message authorizeDiv">
           <div class="authorizeText">Please contact Project Owner for Authorization Key to proceed</div>
             <input type="text" id="authorizeMessage" />
+            <button type="submit" id="authorizeBtn" >Submit</button>
           </div>
       </div>
   `;
@@ -84,11 +85,42 @@ const authorizedBrowser = authKey === decryptedChatValue;
 
 console.log(authorizedBrowser);
 
+let authorizeDisplayed = false;
+
+const checkInput = (value) => {
+  const keyVal = value;
+
+  // console.log("decryptedChatKey ", decryptedChatKey);
+  // console.log("authKey ", authKey);
+  // console.log("secretKey ", secretKey);
+
+  if (keyVal === authKey) {
+    const encryptedKey = CryptoJS.AES.encrypt(keyVal, secretKey).toString(); //encrypt key in client browser
+
+    sessionStorage.setItem(
+      "chatKey",
+      JSON.stringify({
+        value: encryptedKey,
+        expiry: Date.now() + 600000, // 10 minutes in milliseconds
+      })
+    );
+    alert("Access Granted! Expired in 10 minutes");
+
+    window.location.reload(); //force reload client browser to capture authorization
+  } else {
+    alert("Unauthorized Access!");
+  }
+};
 
 const handleSubmit = async (e) => {
   e.preventDefault();
   const data = new FormData(form);
   form.reset();
+
+  console.log(e.target.value);
+
+  //prevent adding duplicate validateUser form when user click enter multiple times
+  if (authorizeDisplayed) return;
 
   //check timestamp for key expiry
   if (sessionChatKey && Date.now() > sessionChatKey.expiry) {
@@ -104,35 +136,19 @@ const handleSubmit = async (e) => {
   if (!authorizedBrowser) {
     chatContainer.innerHTML += validateUser("test");
     let authorizeMessage = chatContainer.querySelector("#authorizeMessage");
+    let btn = chatContainer.querySelector("#authorizeBtn");
+    authorizeDisplayed = true;
+
     authorizeMessage.addEventListener("keyup", (e) => {
       if (e.keyCode === 13 && e.target.value) {
         // console.log(e.target.value);
-        const keyVal = e.target.value;
-
-        // console.log("decryptedChatKey ", decryptedChatKey);
-        // console.log("authKey ", authKey);
-        // console.log("secretKey ", secretKey);
-
-        if (keyVal === authKey) {
-          const encryptedKey = CryptoJS.AES.encrypt(
-            keyVal,
-            secretKey
-          ).toString(); //encrypt key in client browser
-
-          sessionStorage.setItem(
-            "chatKey",
-            JSON.stringify({
-              value: encryptedKey,
-              expiry: Date.now() + 600000, // 10 minutes in milliseconds
-            })
-          );
-          alert("Access Granted! Expired in 10 minutes");
-
-          window.location.reload(); //force reload client browser to capture authorization
-        } else {
-          alert("Unauthorized Access!");
-        }
+        checkInput(e.target.value);
+        e.target.value = "";
       }
+    });
+    btn.addEventListener("click", () => {
+      checkInput(authorizeMessage.value);
+      authorizeMessage.value = "";
     });
     return;
   }
@@ -175,5 +191,9 @@ const handleSubmit = async (e) => {
 
 form.addEventListener("submit", handleSubmit);
 form.addEventListener("keyup", (e) => {
-  if (e.keyCode === 13) handleSubmit(e);
+  if (e.target.value.trim() === "") return;
+
+  if (e.keyCode === 13) {
+    handleSubmit(e);
+  }
 });
