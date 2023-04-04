@@ -201,9 +201,11 @@ form img {
   letter-spacing: 0.2dvh
 }
 
+/* Update this in your existing CSS */
 #nav-button {
   position: absolute;
   top: 10px;
+  left: auto;
   right: 10px;
   font-size: 18px;
   color: #dcdcdc;
@@ -219,11 +221,17 @@ form img {
   background-color: #0f8b6e;
 }
 
+/* Update the media query */
 @media screen and (max-width: 650px) {
   #nav-button {
-    top: auto;
-    bottom: 20px;
-    left: 10px;
-    text-align: center;
+    max-width: 200px;
+    top: 10px; /* Change this from auto to 10px */
+    bottom: auto; /* Add this to override the value set in desktop view */
+    right: 10px;
+  }
+}
+@media screen and (max-width: 650px) {
+  #app {
+    padding-top: 60px; /* Add padding to create space for the navigation button */
   }
 }
